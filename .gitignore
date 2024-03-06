@@ -128,3 +128,12 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+## Customized for Ocial's axios api client
+src/README.md
+src/.*
+src/git_push.sh
+src/package.json
+src/package-lock.json
+src/tsconfig.esm.json
+src/tsconfig.json

@@ -1,0 +1,53 @@
+name: Generate OpenAPI 🔀
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  generate:
+    name: Run generator 🔬
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout ⬇️
+        uses: actions/checkout@v4.1.1
+        with:
+          show-progress: false
+          fetch-depth: 0
+
+      - name: Download OpenAPI file
+        run: curl -s -o openapi.yaml https://raw.githubusercontent.com/ispp-2324-ocial/backend/develop/openapi.yaml
+
+      - name: Generate
+        uses: docker://openapitools/openapi-generator-cli:latest-release
+        env:
+          TS_POST_PROCESS_FILE: true
+        with:
+          args: >-
+            generate -i /github/workspace/openapi.yaml
+            -g typescript-axios --additional-properties=npmName=@ocial/client-axios
+            --additional-properties=supportsES6=true
+            --additional-properties=useSingleRequestParameter=true
+            --additional-properties=stringEnums=true
+            --enable-post-process-file
+            -o /github/workspace/src
+
+      - name: Check if .ts files were modified
+        id: diff
+        run: echo "count=$(git status -su | grep ts | wc -l)" >> $GITHUB_OUTPUT
+
+      - name: Commit new changes to the repo
+        if: ${{ steps.diff.outputs.count > 0 }}
+        run: |
+          git config user.name GitHub Actions
+          git config user.email action@github.com
+          git config pull.rebase true
+          git config rebase.autoStash true
+          git pull
+          git add src/*.ts
+          git commit -m "ci: update axios client" -m "" -m "Run id: ${{ github.run_id }}" || echo
+          git push
