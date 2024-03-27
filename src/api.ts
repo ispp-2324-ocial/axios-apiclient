@@ -24,17 +24,29 @@ import type { RequestArgs } from './base';
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
 /**
- * * `0` - SPORTS * `1` - MUSIC * `2` - MARKETS * `3` - RELAX_ACTIVITIES * `4` - LIVE_CONCERT
+ * * `email` - EMAIL * `google` - GOOGLE
+ * @export
+ * @enum {string}
+ */
+
+export enum AuthProviderEnum {
+    Email = 'email',
+    Google = 'google'
+}
+
+
+/**
+ * * `Sports` - SPORTS * `Music` - MUSIC * `Markets` - MARKETS * `Relax activities` - RELAX_ACTIVITIES * `Live concert` - LIVE_CONCERT
  * @export
  * @enum {string}
  */
 
 export enum CategoryEnum {
-    NUMBER_0 = 0,
-    NUMBER_1 = 1,
-    NUMBER_2 = 2,
-    NUMBER_3 = 3,
-    NUMBER_4 = 4
+    Sports = 'Sports',
+    Music = 'Music',
+    Markets = 'Markets',
+    RelaxActivities = 'Relax activities',
+    LiveConcert = 'Live concert'
 }
 
 
@@ -92,13 +104,25 @@ export interface Client {
      * @type {string}
      * @memberof Client
      */
+    'imageB64'?: string;
+    /**
+     * 
+     * @type {Image}
+     * @memberof Client
+     */
+    'image'?: Image;
+    /**
+     * 
+     * @type {string}
+     * @memberof Client
+     */
     'name': string;
     /**
      * 
      * @type {string}
      * @memberof Client
      */
-    'identification_document': string;
+    'identificationDocument': string;
     /**
      * 
      * @type {TypeClientEnum}
@@ -110,19 +134,19 @@ export interface Client {
      * @type {number}
      * @memberof Client
      */
-    'default_latitude': number;
+    'defaultLatitude': number;
     /**
      * 
      * @type {number}
      * @memberof Client
      */
-    'default_longitude': number;
+    'defaultLongitude': number;
     /**
      * 
      * @type {number}
      * @memberof Client
      */
-    'usuario': number;
+    'djangoUser': number;
 }
 
 
@@ -138,6 +162,24 @@ export interface Event {
      * @memberof Event
      */
     'id'?: number;
+    /**
+     * 
+     * @type {OcialClient}
+     * @memberof Event
+     */
+    'ocialClient': OcialClient;
+    /**
+     * 
+     * @type {string}
+     * @memberof Event
+     */
+    'imageB64'?: string;
+    /**
+     * 
+     * @type {Image}
+     * @memberof Event
+     */
+    'image'?: Image;
     /**
      * 
      * @type {string}
@@ -161,13 +203,13 @@ export interface Event {
      * @type {string}
      * @memberof Event
      */
-    'date': string;
+    'timeStart'?: string;
     /**
      * 
      * @type {string}
      * @memberof Event
      */
-    'hour': string;
+    'timeEnd'?: string;
     /**
      * 
      * @type {number}
@@ -192,15 +234,91 @@ export interface Event {
      * @memberof Event
      */
     'longitude': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof Event
-     */
-    'ocialClient': number;
 }
 
 
+/**
+ * 
+ * @export
+ * @interface GoogleSocialAuth
+ */
+export interface GoogleSocialAuth {
+    /**
+     * 
+     * @type {string}
+     * @memberof GoogleSocialAuth
+     */
+    'auth_token': string;
+}
+/**
+ * 
+ * @export
+ * @interface GoogleSocialAuthResponse
+ */
+export interface GoogleSocialAuthResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GoogleSocialAuthResponse
+     */
+    'token'?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof GoogleSocialAuthResponse
+     */
+    'isClient': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface Image
+ */
+export interface Image {
+    /**
+     * 
+     * @type {number}
+     * @memberof Image
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Image
+     */
+    'image': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Image
+     */
+    'blurhash': string;
+}
+/**
+ * 
+ * @export
+ * @interface Like
+ */
+export interface Like {
+    /**
+     * 
+     * @type {number}
+     * @memberof Like
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Like
+     */
+    'event': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Like
+     */
+    'user': number;
+}
 /**
  * Serializer for user login.  Fields: - `username` (string): The username of the user. - `password` (string): The password of the user.
  * @export
@@ -243,7 +361,7 @@ export interface Message {
      * @type {number}
      * @memberof Message
      */
-    'chat': number;
+    'chatId': number;
 }
 /**
  * 
@@ -263,85 +381,107 @@ export interface MessageCreate {
      * @memberof MessageCreate
      */
     'content': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof MessageCreate
-     */
-    'chat': number;
 }
 /**
  * 
  * @export
- * @interface PatchedEvent
+ * @interface OcialClient
  */
-export interface PatchedEvent {
+export interface OcialClient {
+    /**
+     * 
+     * @type {string}
+     * @memberof OcialClient
+     */
+    'name': string;
     /**
      * 
      * @type {number}
-     * @memberof PatchedEvent
+     * @memberof OcialClient
+     */
+    'defaultLatitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof OcialClient
+     */
+    'defaultLongitude': number;
+}
+/**
+ * 
+ * @export
+ * @interface Subscription
+ */
+export interface Subscription {
+    /**
+     * 
+     * @type {number}
+     * @memberof Subscription
      */
     'id'?: number;
     /**
      * 
-     * @type {string}
-     * @memberof PatchedEvent
+     * @type {TypeSubscriptionEnum}
+     * @memberof Subscription
      */
-    'name'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PatchedEvent
-     */
-    'place'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PatchedEvent
-     */
-    'event'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PatchedEvent
-     */
-    'date'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof PatchedEvent
-     */
-    'hour'?: string;
+    'typeSubscription'?: TypeSubscriptionEnum;
     /**
      * 
      * @type {number}
-     * @memberof PatchedEvent
+     * @memberof Subscription
      */
-    'capacity'?: number;
+    'numEvents'?: number;
     /**
      * 
-     * @type {CategoryEnum}
-     * @memberof PatchedEvent
+     * @type {boolean}
+     * @memberof Subscription
      */
-    'category'?: CategoryEnum;
+    'canEditEvent'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Subscription
+     */
+    'canSendNotifications'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Subscription
+     */
+    'canHaveRecurrentEvents'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Subscription
+     */
+    'canHaveOustandingEvents'?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Subscription
+     */
+    'canHaveRating'?: boolean;
     /**
      * 
      * @type {number}
-     * @memberof PatchedEvent
+     * @memberof Subscription
      */
-    'latitude'?: number;
+    'ocialClientId': number;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface SubscriptionCreateUpdate
+ */
+export interface SubscriptionCreateUpdate {
     /**
      * 
-     * @type {number}
-     * @memberof PatchedEvent
+     * @type {TypeSubscriptionEnum}
+     * @memberof SubscriptionCreateUpdate
      */
-    'longitude'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof PatchedEvent
-     */
-    'ocialClient'?: number;
+    'typeSubscription'?: TypeSubscriptionEnum;
 }
 
 
@@ -365,17 +505,30 @@ export interface TokenResponse {
     'isClient': boolean;
 }
 /**
- * * `0` - Small business * `1` - Artist * `2` - Bar Restaurant * `3` - Local Guide * `4` - Events And Concerts
+ * * `Small business` - SMALL_BUSINESS * `Artist` - ARTIST * `Bar Restaurant` - BAR_RESTAURANT * `Local Guide` - LOCAL_GUIDE * `Events And Concerts` - EVENTS_AND_CONCERTS
  * @export
  * @enum {string}
  */
 
 export enum TypeClientEnum {
-    _0 = '0',
-    _1 = '1',
-    _2 = '2',
-    _3 = '3',
-    _4 = '4'
+    SmallBusiness = 'Small business',
+    Artist = 'Artist',
+    BarRestaurant = 'Bar Restaurant',
+    LocalGuide = 'Local Guide',
+    EventsAndConcerts = 'Events And Concerts'
+}
+
+
+/**
+ * * `Free` - FREE * `Basic` - BASIC * `Pro` - PRO
+ * @export
+ * @enum {string}
+ */
+
+export enum TypeSubscriptionEnum {
+    Free = 'Free',
+    Basic = 'Basic',
+    Pro = 'Pro'
 }
 
 
@@ -411,6 +564,12 @@ export interface User {
     'username': string;
     /**
      * 
+     * @type {AuthProviderEnum}
+     * @memberof User
+     */
+    'auth_provider'?: AuthProviderEnum;
+    /**
+     * 
      * @type {number}
      * @memberof User
      */
@@ -423,16 +582,10 @@ export interface User {
     'lastKnowLocLong': number;
     /**
      * 
-     * @type {CategoryEnum}
-     * @memberof User
-     */
-    'category'?: CategoryEnum;
-    /**
-     * 
      * @type {number}
      * @memberof User
      */
-    'usuario': number;
+    'djangoUser': number;
 }
 
 
@@ -968,6 +1121,42 @@ export class ChatApi extends BaseAPI {
 export const EventApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Get client instance by event id
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventClientRetrieve: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventClientRetrieve', 'id', id)
+            const localVarPath = `/api/event/{id}/client/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Create a new event
          * @param {Event} event 
          * @param {*} [options] Override http request option.
@@ -1024,6 +1213,120 @@ export const EventApiAxiosParamCreator = function (configuration?: Configuration
             }
 
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Like an event
+         * @param {number} id 
+         * @param {Like} like 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventLikeCreate: async (id: number, like: Like, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventLikeCreate', 'id', id)
+            // verify required parameter 'like' is not null or undefined
+            assertParamExists('eventLikeCreate', 'like', like)
+            const localVarPath = `/api/event/{id}/like/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(like, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Unlike an event
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventLikeDestroy: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventLikeDestroy', 'id', id)
+            const localVarPath = `/api/event/{id}/like/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get likes of an event
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventLikeList: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventLikeList', 'id', id)
+            const localVarPath = `/api/event/{id}/like/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -1163,82 +1466,6 @@ export const EventApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Delete a rating
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        eventRatingDeleteDestroy: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('eventRatingDeleteDestroy', 'id', id)
-            const localVarPath = `/api/event/rating/{id}/delete/`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication tokenAuth required
-            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {number} id 
-         * @param {PatchedEvent} [patchedEvent] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        eventUpdatePartialUpdate: async (id: number, patchedEvent?: PatchedEvent, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('eventUpdatePartialUpdate', 'id', id)
-            const localVarPath = `/api/event/{id}/update/`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication tokenAuth required
-            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(patchedEvent, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Update an event
          * @param {number} id 
          * @param {Event} event 
@@ -1291,6 +1518,18 @@ export const EventApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = EventApiAxiosParamCreator(configuration)
     return {
         /**
+         * Get client instance by event id
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventClientRetrieve(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OcialClient>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventClientRetrieve(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventClientRetrieve']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Create a new event
          * @param {Event} event 
          * @param {*} [options] Override http request option.
@@ -1312,6 +1551,43 @@ export const EventApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.eventDeleteDestroy(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['EventApi.eventDeleteDestroy']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Like an event
+         * @param {number} id 
+         * @param {Like} like 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventLikeCreate(id: number, like: Like, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Like>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventLikeCreate(id, like, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventLikeCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Unlike an event
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventLikeDestroy(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventLikeDestroy(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventLikeDestroy']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Get likes of an event
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventLikeList(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Like>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventLikeList(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventLikeList']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1352,31 +1628,6 @@ export const EventApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Delete a rating
-         * @param {number} id 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async eventRatingDeleteDestroy(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.eventRatingDeleteDestroy(id, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['EventApi.eventRatingDeleteDestroy']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {number} id 
-         * @param {PatchedEvent} [patchedEvent] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async eventUpdatePartialUpdate(id: number, patchedEvent?: PatchedEvent, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Event>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.eventUpdatePartialUpdate(id, patchedEvent, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['EventApi.eventUpdatePartialUpdate']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
          * Update an event
          * @param {number} id 
          * @param {Event} event 
@@ -1400,6 +1651,15 @@ export const EventApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = EventApiFp(configuration)
     return {
         /**
+         * Get client instance by event id
+         * @param {EventApiEventClientRetrieveRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventClientRetrieve(requestParameters: EventApiEventClientRetrieveRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<OcialClient>> {
+            return localVarFp.eventClientRetrieve(requestParameters.id, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Create a new event
          * @param {EventApiEventCreateCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -1416,6 +1676,33 @@ export const EventApiFactory = function (configuration?: Configuration, basePath
          */
         eventDeleteDestroy(requestParameters: EventApiEventDeleteDestroyRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.eventDeleteDestroy(requestParameters.id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Like an event
+         * @param {EventApiEventLikeCreateRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventLikeCreate(requestParameters: EventApiEventLikeCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<Like> {
+            return localVarFp.eventLikeCreate(requestParameters.id, requestParameters.like, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Unlike an event
+         * @param {EventApiEventLikeDestroyRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventLikeDestroy(requestParameters: EventApiEventLikeDestroyRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.eventLikeDestroy(requestParameters.id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get likes of an event
+         * @param {EventApiEventLikeListRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventLikeList(requestParameters: EventApiEventLikeListRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<Like>> {
+            return localVarFp.eventLikeList(requestParameters.id, options).then((request) => request(axios, basePath));
         },
         /**
          * List of events by client id
@@ -1444,24 +1731,6 @@ export const EventApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.eventNearbyList(requestParameters.latitude, requestParameters.longitude, requestParameters.radius, options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete a rating
-         * @param {EventApiEventRatingDeleteDestroyRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        eventRatingDeleteDestroy(requestParameters: EventApiEventRatingDeleteDestroyRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.eventRatingDeleteDestroy(requestParameters.id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {EventApiEventUpdatePartialUpdateRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        eventUpdatePartialUpdate(requestParameters: EventApiEventUpdatePartialUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<Event> {
-            return localVarFp.eventUpdatePartialUpdate(requestParameters.id, requestParameters.patchedEvent, options).then((request) => request(axios, basePath));
-        },
-        /**
          * Update an event
          * @param {EventApiEventUpdateUpdateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -1472,6 +1741,20 @@ export const EventApiFactory = function (configuration?: Configuration, basePath
         },
     };
 };
+
+/**
+ * Request parameters for eventClientRetrieve operation in EventApi.
+ * @export
+ * @interface EventApiEventClientRetrieveRequest
+ */
+export interface EventApiEventClientRetrieveRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof EventApiEventClientRetrieve
+     */
+    readonly id: number
+}
 
 /**
  * Request parameters for eventCreateCreate operation in EventApi.
@@ -1497,6 +1780,55 @@ export interface EventApiEventDeleteDestroyRequest {
      * 
      * @type {number}
      * @memberof EventApiEventDeleteDestroy
+     */
+    readonly id: number
+}
+
+/**
+ * Request parameters for eventLikeCreate operation in EventApi.
+ * @export
+ * @interface EventApiEventLikeCreateRequest
+ */
+export interface EventApiEventLikeCreateRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof EventApiEventLikeCreate
+     */
+    readonly id: number
+
+    /**
+     * 
+     * @type {Like}
+     * @memberof EventApiEventLikeCreate
+     */
+    readonly like: Like
+}
+
+/**
+ * Request parameters for eventLikeDestroy operation in EventApi.
+ * @export
+ * @interface EventApiEventLikeDestroyRequest
+ */
+export interface EventApiEventLikeDestroyRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof EventApiEventLikeDestroy
+     */
+    readonly id: number
+}
+
+/**
+ * Request parameters for eventLikeList operation in EventApi.
+ * @export
+ * @interface EventApiEventLikeListRequest
+ */
+export interface EventApiEventLikeListRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof EventApiEventLikeList
      */
     readonly id: number
 }
@@ -1544,41 +1876,6 @@ export interface EventApiEventNearbyListRequest {
 }
 
 /**
- * Request parameters for eventRatingDeleteDestroy operation in EventApi.
- * @export
- * @interface EventApiEventRatingDeleteDestroyRequest
- */
-export interface EventApiEventRatingDeleteDestroyRequest {
-    /**
-     * 
-     * @type {number}
-     * @memberof EventApiEventRatingDeleteDestroy
-     */
-    readonly id: number
-}
-
-/**
- * Request parameters for eventUpdatePartialUpdate operation in EventApi.
- * @export
- * @interface EventApiEventUpdatePartialUpdateRequest
- */
-export interface EventApiEventUpdatePartialUpdateRequest {
-    /**
-     * 
-     * @type {number}
-     * @memberof EventApiEventUpdatePartialUpdate
-     */
-    readonly id: number
-
-    /**
-     * 
-     * @type {PatchedEvent}
-     * @memberof EventApiEventUpdatePartialUpdate
-     */
-    readonly patchedEvent?: PatchedEvent
-}
-
-/**
  * Request parameters for eventUpdateUpdate operation in EventApi.
  * @export
  * @interface EventApiEventUpdateUpdateRequest
@@ -1607,6 +1904,17 @@ export interface EventApiEventUpdateUpdateRequest {
  */
 export class EventApi extends BaseAPI {
     /**
+     * Get client instance by event id
+     * @param {EventApiEventClientRetrieveRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventClientRetrieve(requestParameters: EventApiEventClientRetrieveRequest, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventClientRetrieve(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Create a new event
      * @param {EventApiEventCreateCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -1626,6 +1934,39 @@ export class EventApi extends BaseAPI {
      */
     public eventDeleteDestroy(requestParameters: EventApiEventDeleteDestroyRequest, options?: RawAxiosRequestConfig) {
         return EventApiFp(this.configuration).eventDeleteDestroy(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Like an event
+     * @param {EventApiEventLikeCreateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventLikeCreate(requestParameters: EventApiEventLikeCreateRequest, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventLikeCreate(requestParameters.id, requestParameters.like, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Unlike an event
+     * @param {EventApiEventLikeDestroyRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventLikeDestroy(requestParameters: EventApiEventLikeDestroyRequest, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventLikeDestroy(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get likes of an event
+     * @param {EventApiEventLikeListRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventLikeList(requestParameters: EventApiEventLikeListRequest, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventLikeList(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1661,28 +2002,6 @@ export class EventApi extends BaseAPI {
     }
 
     /**
-     * Delete a rating
-     * @param {EventApiEventRatingDeleteDestroyRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof EventApi
-     */
-    public eventRatingDeleteDestroy(requestParameters: EventApiEventRatingDeleteDestroyRequest, options?: RawAxiosRequestConfig) {
-        return EventApiFp(this.configuration).eventRatingDeleteDestroy(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {EventApiEventUpdatePartialUpdateRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof EventApi
-     */
-    public eventUpdatePartialUpdate(requestParameters: EventApiEventUpdatePartialUpdateRequest, options?: RawAxiosRequestConfig) {
-        return EventApiFp(this.configuration).eventUpdatePartialUpdate(requestParameters.id, requestParameters.patchedEvent, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
      * Update an event
      * @param {EventApiEventUpdateUpdateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -1691,6 +2010,331 @@ export class EventApi extends BaseAPI {
      */
     public eventUpdateUpdate(requestParameters: EventApiEventUpdateUpdateRequest, options?: RawAxiosRequestConfig) {
         return EventApiFp(this.configuration).eventUpdateUpdate(requestParameters.id, requestParameters.event, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * SubscriptionApi - axios parameter creator
+ * @export
+ */
+export const SubscriptionApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a new subscription with specific behavior based on subscription type.
+         * @param {SubscriptionCreateUpdate} [subscriptionCreateUpdate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        subscriptionCreateCreate: async (subscriptionCreateUpdate?: SubscriptionCreateUpdate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/subscription/create/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(subscriptionCreateUpdate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete the current subscription of the authenticated user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        subscriptionDeleteDestroy: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/subscription/delete/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve the current subscription for the authenticated user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        subscriptionGetList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/subscription/get/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update the subscription of the authenticated user
+         * @param {SubscriptionCreateUpdate} [subscriptionCreateUpdate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        subscriptionUpdateUpdate: async (subscriptionCreateUpdate?: SubscriptionCreateUpdate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/subscription/update/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(subscriptionCreateUpdate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SubscriptionApi - functional programming interface
+ * @export
+ */
+export const SubscriptionApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SubscriptionApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a new subscription with specific behavior based on subscription type.
+         * @param {SubscriptionCreateUpdate} [subscriptionCreateUpdate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async subscriptionCreateCreate(subscriptionCreateUpdate?: SubscriptionCreateUpdate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Subscription>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.subscriptionCreateCreate(subscriptionCreateUpdate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SubscriptionApi.subscriptionCreateCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Delete the current subscription of the authenticated user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async subscriptionDeleteDestroy(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.subscriptionDeleteDestroy(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SubscriptionApi.subscriptionDeleteDestroy']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieve the current subscription for the authenticated user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async subscriptionGetList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Subscription>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.subscriptionGetList(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SubscriptionApi.subscriptionGetList']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update the subscription of the authenticated user
+         * @param {SubscriptionCreateUpdate} [subscriptionCreateUpdate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async subscriptionUpdateUpdate(subscriptionCreateUpdate?: SubscriptionCreateUpdate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SubscriptionCreateUpdate>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.subscriptionUpdateUpdate(subscriptionCreateUpdate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SubscriptionApi.subscriptionUpdateUpdate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * SubscriptionApi - factory interface
+ * @export
+ */
+export const SubscriptionApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SubscriptionApiFp(configuration)
+    return {
+        /**
+         * Create a new subscription with specific behavior based on subscription type.
+         * @param {SubscriptionApiSubscriptionCreateCreateRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        subscriptionCreateCreate(requestParameters: SubscriptionApiSubscriptionCreateCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<Subscription> {
+            return localVarFp.subscriptionCreateCreate(requestParameters.subscriptionCreateUpdate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete the current subscription of the authenticated user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        subscriptionDeleteDestroy(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.subscriptionDeleteDestroy(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve the current subscription for the authenticated user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        subscriptionGetList(options?: RawAxiosRequestConfig): AxiosPromise<Array<Subscription>> {
+            return localVarFp.subscriptionGetList(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update the subscription of the authenticated user
+         * @param {SubscriptionApiSubscriptionUpdateUpdateRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        subscriptionUpdateUpdate(requestParameters: SubscriptionApiSubscriptionUpdateUpdateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<SubscriptionCreateUpdate> {
+            return localVarFp.subscriptionUpdateUpdate(requestParameters.subscriptionCreateUpdate, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for subscriptionCreateCreate operation in SubscriptionApi.
+ * @export
+ * @interface SubscriptionApiSubscriptionCreateCreateRequest
+ */
+export interface SubscriptionApiSubscriptionCreateCreateRequest {
+    /**
+     * 
+     * @type {SubscriptionCreateUpdate}
+     * @memberof SubscriptionApiSubscriptionCreateCreate
+     */
+    readonly subscriptionCreateUpdate?: SubscriptionCreateUpdate
+}
+
+/**
+ * Request parameters for subscriptionUpdateUpdate operation in SubscriptionApi.
+ * @export
+ * @interface SubscriptionApiSubscriptionUpdateUpdateRequest
+ */
+export interface SubscriptionApiSubscriptionUpdateUpdateRequest {
+    /**
+     * 
+     * @type {SubscriptionCreateUpdate}
+     * @memberof SubscriptionApiSubscriptionUpdateUpdate
+     */
+    readonly subscriptionCreateUpdate?: SubscriptionCreateUpdate
+}
+
+/**
+ * SubscriptionApi - object-oriented interface
+ * @export
+ * @class SubscriptionApi
+ * @extends {BaseAPI}
+ */
+export class SubscriptionApi extends BaseAPI {
+    /**
+     * Create a new subscription with specific behavior based on subscription type.
+     * @param {SubscriptionApiSubscriptionCreateCreateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SubscriptionApi
+     */
+    public subscriptionCreateCreate(requestParameters: SubscriptionApiSubscriptionCreateCreateRequest = {}, options?: RawAxiosRequestConfig) {
+        return SubscriptionApiFp(this.configuration).subscriptionCreateCreate(requestParameters.subscriptionCreateUpdate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete the current subscription of the authenticated user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SubscriptionApi
+     */
+    public subscriptionDeleteDestroy(options?: RawAxiosRequestConfig) {
+        return SubscriptionApiFp(this.configuration).subscriptionDeleteDestroy(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve the current subscription for the authenticated user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SubscriptionApi
+     */
+    public subscriptionGetList(options?: RawAxiosRequestConfig) {
+        return SubscriptionApiFp(this.configuration).subscriptionGetList(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update the subscription of the authenticated user
+     * @param {SubscriptionApiSubscriptionUpdateUpdateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SubscriptionApi
+     */
+    public subscriptionUpdateUpdate(requestParameters: SubscriptionApiSubscriptionUpdateUpdateRequest = {}, options?: RawAxiosRequestConfig) {
+        return SubscriptionApiFp(this.configuration).subscriptionUpdateUpdate(requestParameters.subscriptionCreateUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1812,6 +2456,44 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {GoogleSocialAuth} googleSocialAuth 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersUserGoogleOauth2Create: async (googleSocialAuth: GoogleSocialAuth, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'googleSocialAuth' is not null or undefined
+            assertParamExists('usersUserGoogleOauth2Create', 'googleSocialAuth', googleSocialAuth)
+            const localVarPath = `/api/users/user/google-oauth2/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(googleSocialAuth, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {User} user 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1895,6 +2577,18 @@ export const UsersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {GoogleSocialAuth} googleSocialAuth 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersUserGoogleOauth2Create(googleSocialAuth: GoogleSocialAuth, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GoogleSocialAuthResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersUserGoogleOauth2Create(googleSocialAuth, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.usersUserGoogleOauth2Create']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {User} user 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1943,6 +2637,15 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @param {UsersApiUsersUserGoogleOauth2CreateRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersUserGoogleOauth2Create(requestParameters: UsersApiUsersUserGoogleOauth2CreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<GoogleSocialAuthResponse> {
+            return localVarFp.usersUserGoogleOauth2Create(requestParameters.googleSocialAuth, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {UsersApiUsersUserRegisterCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1979,6 +2682,20 @@ export interface UsersApiUsersLoginCreateRequest {
      * @memberof UsersApiUsersLoginCreate
      */
     readonly loginUser: LoginUser
+}
+
+/**
+ * Request parameters for usersUserGoogleOauth2Create operation in UsersApi.
+ * @export
+ * @interface UsersApiUsersUserGoogleOauth2CreateRequest
+ */
+export interface UsersApiUsersUserGoogleOauth2CreateRequest {
+    /**
+     * 
+     * @type {GoogleSocialAuth}
+     * @memberof UsersApiUsersUserGoogleOauth2Create
+     */
+    readonly googleSocialAuth: GoogleSocialAuth
 }
 
 /**
@@ -2032,6 +2749,17 @@ export class UsersApi extends BaseAPI {
      */
     public usersLogoutCreate(options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).usersLogoutCreate(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UsersApiUsersUserGoogleOauth2CreateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public usersUserGoogleOauth2Create(requestParameters: UsersApiUsersUserGoogleOauth2CreateRequest, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersUserGoogleOauth2Create(requestParameters.googleSocialAuth, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
