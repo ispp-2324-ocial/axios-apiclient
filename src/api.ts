@@ -72,81 +72,81 @@ export interface Chat {
 /**
  * 
  * @export
- * @interface Client
+ * @interface ClientCreate
  */
-export interface Client {
+export interface ClientCreate {
     /**
      * 
      * @type {number}
-     * @memberof Client
+     * @memberof ClientCreate
      */
     'id'?: number;
     /**
      * 
      * @type {string}
-     * @memberof Client
+     * @memberof ClientCreate
      */
     'password': string;
     /**
      * 
      * @type {string}
-     * @memberof Client
+     * @memberof ClientCreate
      */
     'email'?: string;
     /**
      * 
      * @type {string}
-     * @memberof Client
+     * @memberof ClientCreate
      */
     'username': string;
     /**
      * 
      * @type {string}
-     * @memberof Client
+     * @memberof ClientCreate
      */
     'imageB64'?: string;
     /**
      * 
-     * @type {Image}
-     * @memberof Client
-     */
-    'image'?: Image;
-    /**
-     * 
      * @type {string}
-     * @memberof Client
+     * @memberof ClientCreate
      */
     'name': string;
     /**
      * 
      * @type {string}
-     * @memberof Client
+     * @memberof ClientCreate
      */
     'identificationDocument': string;
     /**
      * 
      * @type {TypeClientEnum}
-     * @memberof Client
+     * @memberof ClientCreate
      */
     'typeClient'?: TypeClientEnum;
     /**
      * 
      * @type {number}
-     * @memberof Client
+     * @memberof ClientCreate
      */
     'defaultLatitude': number;
     /**
      * 
      * @type {number}
-     * @memberof Client
+     * @memberof ClientCreate
      */
     'defaultLongitude': number;
     /**
      * 
      * @type {number}
-     * @memberof Client
+     * @memberof ClientCreate
      */
     'djangoUser': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClientCreate
+     */
+    'image'?: number | null;
 }
 
 
@@ -168,12 +168,6 @@ export interface Event {
      * @memberof Event
      */
     'ocialClient': OcialClient;
-    /**
-     * 
-     * @type {string}
-     * @memberof Event
-     */
-    'imageB64'?: string;
     /**
      * 
      * @type {Image}
@@ -240,6 +234,93 @@ export interface Event {
 /**
  * 
  * @export
+ * @interface EventCreate
+ */
+export interface EventCreate {
+    /**
+     * 
+     * @type {number}
+     * @memberof EventCreate
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {OcialClient}
+     * @memberof EventCreate
+     */
+    'ocialClient': OcialClient;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventCreate
+     */
+    'imageB64'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventCreate
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventCreate
+     */
+    'place': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventCreate
+     */
+    'event': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventCreate
+     */
+    'timeStart'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventCreate
+     */
+    'timeEnd'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventCreate
+     */
+    'capacity'?: number;
+    /**
+     * 
+     * @type {CategoryEnum}
+     * @memberof EventCreate
+     */
+    'category'?: CategoryEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventCreate
+     */
+    'latitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventCreate
+     */
+    'longitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventCreate
+     */
+    'image'?: number | null;
+}
+
+
+/**
+ * 
+ * @export
  * @interface GoogleSocialAuth
  */
 export interface GoogleSocialAuth {
@@ -275,12 +356,6 @@ export interface GoogleSocialAuthResponse {
  * @interface Image
  */
 export interface Image {
-    /**
-     * 
-     * @type {number}
-     * @memberof Image
-     */
-    'id'?: number;
     /**
      * 
      * @type {string}
@@ -1158,13 +1233,13 @@ export const EventApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * Create a new event
-         * @param {Event} event 
+         * @param {EventCreate} eventCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eventCreateCreate: async (event: Event, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'event' is not null or undefined
-            assertParamExists('eventCreateCreate', 'event', event)
+        eventCreateCreate: async (eventCreate: EventCreate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'eventCreate' is not null or undefined
+            assertParamExists('eventCreateCreate', 'eventCreate', eventCreate)
             const localVarPath = `/api/event/create/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1187,7 +1262,7 @@ export const EventApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(event, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(eventCreate, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1468,15 +1543,15 @@ export const EventApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Update an event
          * @param {number} id 
-         * @param {Event} event 
+         * @param {EventCreate} eventCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        eventUpdateUpdate: async (id: number, event: Event, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        eventUpdateUpdate: async (id: number, eventCreate: EventCreate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('eventUpdateUpdate', 'id', id)
-            // verify required parameter 'event' is not null or undefined
-            assertParamExists('eventUpdateUpdate', 'event', event)
+            // verify required parameter 'eventCreate' is not null or undefined
+            assertParamExists('eventUpdateUpdate', 'eventCreate', eventCreate)
             const localVarPath = `/api/event/{id}/update/`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -1500,7 +1575,7 @@ export const EventApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(event, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(eventCreate, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1531,12 +1606,12 @@ export const EventApiFp = function(configuration?: Configuration) {
         },
         /**
          * Create a new event
-         * @param {Event} event 
+         * @param {EventCreate} eventCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eventCreateCreate(event: Event, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.eventCreateCreate(event, options);
+        async eventCreateCreate(eventCreate: EventCreate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventCreateCreate(eventCreate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['EventApi.eventCreateCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1630,12 +1705,12 @@ export const EventApiFp = function(configuration?: Configuration) {
         /**
          * Update an event
          * @param {number} id 
-         * @param {Event} event 
+         * @param {EventCreate} eventCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async eventUpdateUpdate(id: number, event: Event, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.eventUpdateUpdate(id, event, options);
+        async eventUpdateUpdate(id: number, eventCreate: EventCreate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventUpdateUpdate(id, eventCreate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['EventApi.eventUpdateUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1666,7 +1741,7 @@ export const EventApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         eventCreateCreate(requestParameters: EventApiEventCreateCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.eventCreateCreate(requestParameters.event, options).then((request) => request(axios, basePath));
+            return localVarFp.eventCreateCreate(requestParameters.eventCreate, options).then((request) => request(axios, basePath));
         },
         /**
          * Delete an event
@@ -1737,7 +1812,7 @@ export const EventApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         eventUpdateUpdate(requestParameters: EventApiEventUpdateUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.eventUpdateUpdate(requestParameters.id, requestParameters.event, options).then((request) => request(axios, basePath));
+            return localVarFp.eventUpdateUpdate(requestParameters.id, requestParameters.eventCreate, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1764,10 +1839,10 @@ export interface EventApiEventClientRetrieveRequest {
 export interface EventApiEventCreateCreateRequest {
     /**
      * 
-     * @type {Event}
+     * @type {EventCreate}
      * @memberof EventApiEventCreateCreate
      */
-    readonly event: Event
+    readonly eventCreate: EventCreate
 }
 
 /**
@@ -1890,10 +1965,10 @@ export interface EventApiEventUpdateUpdateRequest {
 
     /**
      * 
-     * @type {Event}
+     * @type {EventCreate}
      * @memberof EventApiEventUpdateUpdate
      */
-    readonly event: Event
+    readonly eventCreate: EventCreate
 }
 
 /**
@@ -1922,7 +1997,7 @@ export class EventApi extends BaseAPI {
      * @memberof EventApi
      */
     public eventCreateCreate(requestParameters: EventApiEventCreateCreateRequest, options?: RawAxiosRequestConfig) {
-        return EventApiFp(this.configuration).eventCreateCreate(requestParameters.event, options).then((request) => request(this.axios, this.basePath));
+        return EventApiFp(this.configuration).eventCreateCreate(requestParameters.eventCreate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2009,7 +2084,7 @@ export class EventApi extends BaseAPI {
      * @memberof EventApi
      */
     public eventUpdateUpdate(requestParameters: EventApiEventUpdateUpdateRequest, options?: RawAxiosRequestConfig) {
-        return EventApiFp(this.configuration).eventUpdateUpdate(requestParameters.id, requestParameters.event, options).then((request) => request(this.axios, this.basePath));
+        return EventApiFp(this.configuration).eventUpdateUpdate(requestParameters.id, requestParameters.eventCreate, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2348,13 +2423,13 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @param {Client} client 
+         * @param {ClientCreate} clientCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersClientRegisterCreate: async (client: Client, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'client' is not null or undefined
-            assertParamExists('usersClientRegisterCreate', 'client', client)
+        usersClientRegisterCreate: async (clientCreate: ClientCreate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'clientCreate' is not null or undefined
+            assertParamExists('usersClientRegisterCreate', 'clientCreate', clientCreate)
             const localVarPath = `/api/users/client/register/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2377,7 +2452,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(client, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(clientCreate, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2542,12 +2617,12 @@ export const UsersApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {Client} client 
+         * @param {ClientCreate} clientCreate 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersClientRegisterCreate(client: Client, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.usersClientRegisterCreate(client, options);
+        async usersClientRegisterCreate(clientCreate: ClientCreate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersClientRegisterCreate(clientCreate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.usersClientRegisterCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2616,7 +2691,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @throws {RequiredError}
          */
         usersClientRegisterCreate(requestParameters: UsersApiUsersClientRegisterCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.usersClientRegisterCreate(requestParameters.client, options).then((request) => request(axios, basePath));
+            return localVarFp.usersClientRegisterCreate(requestParameters.clientCreate, options).then((request) => request(axios, basePath));
         },
         /**
          * Inicia la sesión del usuario y devuelve el token de autenticación
@@ -2664,10 +2739,10 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
 export interface UsersApiUsersClientRegisterCreateRequest {
     /**
      * 
-     * @type {Client}
+     * @type {ClientCreate}
      * @memberof UsersApiUsersClientRegisterCreate
      */
-    readonly client: Client
+    readonly clientCreate: ClientCreate
 }
 
 /**
@@ -2727,7 +2802,7 @@ export class UsersApi extends BaseAPI {
      * @memberof UsersApi
      */
     public usersClientRegisterCreate(requestParameters: UsersApiUsersClientRegisterCreateRequest, options?: RawAxiosRequestConfig) {
-        return UsersApiFp(this.configuration).usersClientRegisterCreate(requestParameters.client, options).then((request) => request(this.axios, this.basePath));
+        return UsersApiFp(this.configuration).usersClientRegisterCreate(requestParameters.clientCreate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
