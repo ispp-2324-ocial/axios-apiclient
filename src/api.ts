@@ -378,6 +378,87 @@ export interface EventCreate {
 /**
  * 
  * @export
+ * @interface EventGet
+ */
+export interface EventGet {
+    /**
+     * 
+     * @type {number}
+     * @memberof EventGet
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventGet
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventGet
+     */
+    'place': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventGet
+     */
+    'event': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventGet
+     */
+    'timeStart'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EventGet
+     */
+    'timeEnd'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventGet
+     */
+    'capacity'?: number;
+    /**
+     * 
+     * @type {CategoryEnum}
+     * @memberof EventGet
+     */
+    'category'?: CategoryEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventGet
+     */
+    'latitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventGet
+     */
+    'longitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventGet
+     */
+    'ocialClient': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EventGet
+     */
+    'image'?: number | null;
+}
+
+
+/**
+ * 
+ * @export
  * @interface GoogleSocialAuth
  */
 export interface GoogleSocialAuth {
@@ -1591,6 +1672,42 @@ export const EventApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Get details of an event by event id
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventList: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('eventList', 'id', id)
+            const localVarPath = `/api/event/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * List of events by client id
          * @param {number} id 
          * @param {*} [options] Override http request option.
@@ -1869,6 +1986,18 @@ export const EventApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Get details of an event by event id
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async eventList(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<EventGet>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.eventList(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['EventApi.eventList']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * List of events by client id
          * @param {number} id 
          * @param {*} [options] Override http request option.
@@ -1992,6 +2121,15 @@ export const EventApiFactory = function (configuration?: Configuration, basePath
          */
         eventLikeList(requestParameters: EventApiEventLikeListRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<Like>> {
             return localVarFp.eventLikeList(requestParameters.id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get details of an event by event id
+         * @param {EventApiEventListRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        eventList(requestParameters: EventApiEventListRequest, options?: RawAxiosRequestConfig): AxiosPromise<Array<EventGet>> {
+            return localVarFp.eventList(requestParameters.id, options).then((request) => request(axios, basePath));
         },
         /**
          * List of events by client id
@@ -2131,6 +2269,20 @@ export interface EventApiEventLikeListRequest {
 }
 
 /**
+ * Request parameters for eventList operation in EventApi.
+ * @export
+ * @interface EventApiEventListRequest
+ */
+export interface EventApiEventListRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof EventApiEventList
+     */
+    readonly id: number
+}
+
+/**
  * Request parameters for eventListClientIdList operation in EventApi.
  * @export
  * @interface EventApiEventListClientIdListRequest
@@ -2264,6 +2416,17 @@ export class EventApi extends BaseAPI {
      */
     public eventLikeList(requestParameters: EventApiEventLikeListRequest, options?: RawAxiosRequestConfig) {
         return EventApiFp(this.configuration).eventLikeList(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get details of an event by event id
+     * @param {EventApiEventListRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EventApi
+     */
+    public eventList(requestParameters: EventApiEventListRequest, options?: RawAxiosRequestConfig) {
+        return EventApiFp(this.configuration).eventList(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
