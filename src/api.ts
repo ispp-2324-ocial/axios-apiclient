@@ -153,6 +153,63 @@ export interface ClientCreate {
 /**
  * 
  * @export
+ * @interface ClientGet
+ */
+export interface ClientGet {
+    /**
+     * 
+     * @type {number}
+     * @memberof ClientGet
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClientGet
+     */
+    'name': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ClientGet
+     */
+    'identificationDocument': string;
+    /**
+     * 
+     * @type {TypeClientEnum}
+     * @memberof ClientGet
+     */
+    'typeClient'?: TypeClientEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClientGet
+     */
+    'defaultLatitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClientGet
+     */
+    'defaultLongitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClientGet
+     */
+    'djangoUser': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClientGet
+     */
+    'image'?: number | null;
+}
+
+
+/**
+ * 
+ * @export
  * @interface Event
  */
 export interface Event {
@@ -485,6 +542,81 @@ export interface OcialClient {
 /**
  * 
  * @export
+ * @interface PatchedRatingCreate
+ */
+export interface PatchedRatingCreate {
+    /**
+     * 
+     * @type {number}
+     * @memberof PatchedRatingCreate
+     */
+    'score'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof PatchedRatingCreate
+     */
+    'comment'?: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface Rating
+ */
+export interface Rating {
+    /**
+     * 
+     * @type {number}
+     * @memberof Rating
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Rating
+     */
+    'score'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Rating
+     */
+    'comment'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Rating
+     */
+    'client': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Rating
+     */
+    'user': number;
+}
+/**
+ * 
+ * @export
+ * @interface RatingCreate
+ */
+export interface RatingCreate {
+    /**
+     * 
+     * @type {number}
+     * @memberof RatingCreate
+     */
+    'score'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof RatingCreate
+     */
+    'comment'?: string | null;
+}
+/**
+ * 
+ * @export
  * @interface Subscription
  */
 export interface Subscription {
@@ -659,6 +791,45 @@ export interface User {
      * 
      * @type {number}
      * @memberof User
+     */
+    'djangoUser': number;
+}
+
+
+/**
+ * 
+ * @export
+ * @interface UserGet
+ */
+export interface UserGet {
+    /**
+     * 
+     * @type {number}
+     * @memberof UserGet
+     */
+    'id'?: number;
+    /**
+     * 
+     * @type {AuthProviderEnum}
+     * @memberof UserGet
+     */
+    'auth_provider'?: AuthProviderEnum;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserGet
+     */
+    'lastKnowLocLat': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserGet
+     */
+    'lastKnowLocLong': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof UserGet
      */
     'djangoUser': number;
 }
@@ -2422,6 +2593,38 @@ export class SubscriptionApi extends BaseAPI {
 export const UsersApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Retrieve the current client data for the authenticated client.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersClientGetList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/users/client/get/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @param {ClientCreate} clientCreate 
          * @param {*} [options] Override http request option.
@@ -2460,7 +2663,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Inicia la sesión del usuario y devuelve el token de autenticación
+         * 
          * @param {LoginUser} loginUser 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2498,7 +2701,7 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Cierra la sesión del usuario
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2512,6 +2715,230 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
             }
 
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Create a rating
+         * @param {number} id 
+         * @param {RatingCreate} [ratingCreate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersRatingCreate: async (id: number, ratingCreate?: RatingCreate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('usersRatingCreate', 'id', id)
+            const localVarPath = `/api/users/rating/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(ratingCreate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a rating
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersRatingDeleteDestroy: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('usersRatingDeleteDestroy', 'id', id)
+            const localVarPath = `/api/users/rating/{id}/delete`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {PatchedRatingCreate} [patchedRatingCreate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersRatingUpdatePartialUpdate: async (id: number, patchedRatingCreate?: PatchedRatingCreate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('usersRatingUpdatePartialUpdate', 'id', id)
+            const localVarPath = `/api/users/rating/{id}/update`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(patchedRatingCreate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update an existing rating
+         * @param {number} id 
+         * @param {RatingCreate} [ratingCreate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersRatingUpdateUpdate: async (id: number, ratingCreate?: RatingCreate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('usersRatingUpdateUpdate', 'id', id)
+            const localVarPath = `/api/users/rating/{id}/update`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(ratingCreate, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersRatingsByClientRetrieve: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('usersRatingsByClientRetrieve', 'id', id)
+            const localVarPath = `/api/users/ratings/by-client/{id}/`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication tokenAuth required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve the current user data for the authenticated user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersUserGetList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/users/user/get/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -2616,6 +3043,17 @@ export const UsersApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration)
     return {
         /**
+         * Retrieve the current client data for the authenticated client.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersClientGetList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ClientGet>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersClientGetList(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.usersClientGetList']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
          * @param {ClientCreate} clientCreate 
          * @param {*} [options] Override http request option.
@@ -2628,7 +3066,7 @@ export const UsersApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Inicia la sesión del usuario y devuelve el token de autenticación
+         * 
          * @param {LoginUser} loginUser 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2640,7 +3078,7 @@ export const UsersApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Cierra la sesión del usuario
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2648,6 +3086,80 @@ export const UsersApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.usersLogoutCreate(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UsersApi.usersLogoutCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Create a rating
+         * @param {number} id 
+         * @param {RatingCreate} [ratingCreate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersRatingCreate(id: number, ratingCreate?: RatingCreate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RatingCreate>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersRatingCreate(id, ratingCreate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.usersRatingCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Delete a rating
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersRatingDeleteDestroy(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersRatingDeleteDestroy(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.usersRatingDeleteDestroy']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {PatchedRatingCreate} [patchedRatingCreate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersRatingUpdatePartialUpdate(id: number, patchedRatingCreate?: PatchedRatingCreate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RatingCreate>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersRatingUpdatePartialUpdate(id, patchedRatingCreate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.usersRatingUpdatePartialUpdate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update an existing rating
+         * @param {number} id 
+         * @param {RatingCreate} [ratingCreate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersRatingUpdateUpdate(id: number, ratingCreate?: RatingCreate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RatingCreate>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersRatingUpdateUpdate(id, ratingCreate, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.usersRatingUpdateUpdate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersRatingsByClientRetrieve(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Rating>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersRatingsByClientRetrieve(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.usersRatingsByClientRetrieve']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieve the current user data for the authenticated user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersUserGetList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<UserGet>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersUserGetList(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UsersApi.usersUserGetList']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2685,6 +3197,14 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = UsersApiFp(configuration)
     return {
         /**
+         * Retrieve the current client data for the authenticated client.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersClientGetList(options?: RawAxiosRequestConfig): AxiosPromise<Array<ClientGet>> {
+            return localVarFp.usersClientGetList(options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @param {UsersApiUsersClientRegisterCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -2694,7 +3214,7 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.usersClientRegisterCreate(requestParameters.clientCreate, options).then((request) => request(axios, basePath));
         },
         /**
-         * Inicia la sesión del usuario y devuelve el token de autenticación
+         * 
          * @param {UsersApiUsersLoginCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2703,12 +3223,65 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.usersLoginCreate(requestParameters.loginUser, options).then((request) => request(axios, basePath));
         },
         /**
-         * Cierra la sesión del usuario
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         usersLogoutCreate(options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.usersLogoutCreate(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Create a rating
+         * @param {UsersApiUsersRatingCreateRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersRatingCreate(requestParameters: UsersApiUsersRatingCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<RatingCreate> {
+            return localVarFp.usersRatingCreate(requestParameters.id, requestParameters.ratingCreate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a rating
+         * @param {UsersApiUsersRatingDeleteDestroyRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersRatingDeleteDestroy(requestParameters: UsersApiUsersRatingDeleteDestroyRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.usersRatingDeleteDestroy(requestParameters.id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UsersApiUsersRatingUpdatePartialUpdateRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersRatingUpdatePartialUpdate(requestParameters: UsersApiUsersRatingUpdatePartialUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<RatingCreate> {
+            return localVarFp.usersRatingUpdatePartialUpdate(requestParameters.id, requestParameters.patchedRatingCreate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update an existing rating
+         * @param {UsersApiUsersRatingUpdateUpdateRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersRatingUpdateUpdate(requestParameters: UsersApiUsersRatingUpdateUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<RatingCreate> {
+            return localVarFp.usersRatingUpdateUpdate(requestParameters.id, requestParameters.ratingCreate, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {UsersApiUsersRatingsByClientRetrieveRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersRatingsByClientRetrieve(requestParameters: UsersApiUsersRatingsByClientRetrieveRequest, options?: RawAxiosRequestConfig): AxiosPromise<Rating> {
+            return localVarFp.usersRatingsByClientRetrieve(requestParameters.id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve the current user data for the authenticated user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersUserGetList(options?: RawAxiosRequestConfig): AxiosPromise<Array<UserGet>> {
+            return localVarFp.usersUserGetList(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2760,6 +3333,97 @@ export interface UsersApiUsersLoginCreateRequest {
 }
 
 /**
+ * Request parameters for usersRatingCreate operation in UsersApi.
+ * @export
+ * @interface UsersApiUsersRatingCreateRequest
+ */
+export interface UsersApiUsersRatingCreateRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof UsersApiUsersRatingCreate
+     */
+    readonly id: number
+
+    /**
+     * 
+     * @type {RatingCreate}
+     * @memberof UsersApiUsersRatingCreate
+     */
+    readonly ratingCreate?: RatingCreate
+}
+
+/**
+ * Request parameters for usersRatingDeleteDestroy operation in UsersApi.
+ * @export
+ * @interface UsersApiUsersRatingDeleteDestroyRequest
+ */
+export interface UsersApiUsersRatingDeleteDestroyRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof UsersApiUsersRatingDeleteDestroy
+     */
+    readonly id: number
+}
+
+/**
+ * Request parameters for usersRatingUpdatePartialUpdate operation in UsersApi.
+ * @export
+ * @interface UsersApiUsersRatingUpdatePartialUpdateRequest
+ */
+export interface UsersApiUsersRatingUpdatePartialUpdateRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof UsersApiUsersRatingUpdatePartialUpdate
+     */
+    readonly id: number
+
+    /**
+     * 
+     * @type {PatchedRatingCreate}
+     * @memberof UsersApiUsersRatingUpdatePartialUpdate
+     */
+    readonly patchedRatingCreate?: PatchedRatingCreate
+}
+
+/**
+ * Request parameters for usersRatingUpdateUpdate operation in UsersApi.
+ * @export
+ * @interface UsersApiUsersRatingUpdateUpdateRequest
+ */
+export interface UsersApiUsersRatingUpdateUpdateRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof UsersApiUsersRatingUpdateUpdate
+     */
+    readonly id: number
+
+    /**
+     * 
+     * @type {RatingCreate}
+     * @memberof UsersApiUsersRatingUpdateUpdate
+     */
+    readonly ratingCreate?: RatingCreate
+}
+
+/**
+ * Request parameters for usersRatingsByClientRetrieve operation in UsersApi.
+ * @export
+ * @interface UsersApiUsersRatingsByClientRetrieveRequest
+ */
+export interface UsersApiUsersRatingsByClientRetrieveRequest {
+    /**
+     * 
+     * @type {number}
+     * @memberof UsersApiUsersRatingsByClientRetrieve
+     */
+    readonly id: number
+}
+
+/**
  * Request parameters for usersUserGoogleOauth2Create operation in UsersApi.
  * @export
  * @interface UsersApiUsersUserGoogleOauth2CreateRequest
@@ -2795,6 +3459,16 @@ export interface UsersApiUsersUserRegisterCreateRequest {
  */
 export class UsersApi extends BaseAPI {
     /**
+     * Retrieve the current client data for the authenticated client.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public usersClientGetList(options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersClientGetList(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 
      * @param {UsersApiUsersClientRegisterCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2806,7 +3480,7 @@ export class UsersApi extends BaseAPI {
     }
 
     /**
-     * Inicia la sesión del usuario y devuelve el token de autenticación
+     * 
      * @param {UsersApiUsersLoginCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2817,13 +3491,78 @@ export class UsersApi extends BaseAPI {
     }
 
     /**
-     * Cierra la sesión del usuario
+     * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UsersApi
      */
     public usersLogoutCreate(options?: RawAxiosRequestConfig) {
         return UsersApiFp(this.configuration).usersLogoutCreate(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Create a rating
+     * @param {UsersApiUsersRatingCreateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public usersRatingCreate(requestParameters: UsersApiUsersRatingCreateRequest, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersRatingCreate(requestParameters.id, requestParameters.ratingCreate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete a rating
+     * @param {UsersApiUsersRatingDeleteDestroyRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public usersRatingDeleteDestroy(requestParameters: UsersApiUsersRatingDeleteDestroyRequest, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersRatingDeleteDestroy(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UsersApiUsersRatingUpdatePartialUpdateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public usersRatingUpdatePartialUpdate(requestParameters: UsersApiUsersRatingUpdatePartialUpdateRequest, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersRatingUpdatePartialUpdate(requestParameters.id, requestParameters.patchedRatingCreate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update an existing rating
+     * @param {UsersApiUsersRatingUpdateUpdateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public usersRatingUpdateUpdate(requestParameters: UsersApiUsersRatingUpdateUpdateRequest, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersRatingUpdateUpdate(requestParameters.id, requestParameters.ratingCreate, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {UsersApiUsersRatingsByClientRetrieveRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public usersRatingsByClientRetrieve(requestParameters: UsersApiUsersRatingsByClientRetrieveRequest, options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersRatingsByClientRetrieve(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve the current user data for the authenticated user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UsersApi
+     */
+    public usersUserGetList(options?: RawAxiosRequestConfig) {
+        return UsersApiFp(this.configuration).usersUserGetList(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
